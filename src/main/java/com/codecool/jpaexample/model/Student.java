@@ -1,7 +1,7 @@
 package com.codecool.jpaexample.model;
 
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,29 +15,41 @@ public class Student {
 
     private String name;
 
+    // nullable not needed to define as it is true by default
+    @Column(nullable = true, unique = true)
     private String email;
 
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
+    @Transient
     private long age;
 
     @OneToOne
     private Address address;
 
+    @ElementCollection
+    private List<String> phoneNumbers;
+
+    @ManyToOne
+    @JoinColumn(name = "klass_id")
+    private Klass klass;
+
+
     public Student() {
     }
 
-    public Student(String name, String email, Date dateOfBirth) {
+    public Student(String name, String email, Date dateOfBirth, List<String> phoneNumbers) {
         this.name = name;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.age = (Calendar.getInstance().getTimeInMillis() - dateOfBirth.getTime())
                 / (60L * 60L * 1000L * 24L * 365L);
+        this.phoneNumbers = phoneNumbers;
     }
 
-    public Student(String name, String email, Date dateOfBirth, Address address) {
-        this(name, email, dateOfBirth);
+    public Student(String name, String email, Date dateOfBirth, List<String> phoneNumbers, Address address) {
+        this(name, email, dateOfBirth, phoneNumbers);
         this.address = address;
     }
 

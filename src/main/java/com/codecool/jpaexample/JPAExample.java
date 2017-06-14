@@ -8,8 +8,10 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class JPAExample {
 
@@ -17,6 +19,10 @@ public class JPAExample {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date birthDate1 = Calendar.getInstance().getTime();
         Date birthDate2 = Calendar.getInstance().getTime();
+        List<String> phoneNumber1 = new ArrayList<>();
+        phoneNumber1.add("11-22-33-44-55");
+        List<String> phoneNumber2 = new ArrayList<>();
+        phoneNumber2.add("66-77-88-99-00");
         try {
             birthDate1 = sdf.parse("1997-07-21");
             birthDate2 = sdf.parse("1993-12-01");
@@ -24,9 +30,9 @@ public class JPAExample {
             e.printStackTrace();
         }
 
-        Klass classBp2 = new Klass("Budapest 2016-2");
+        Klass classBp2 = new Klass("Budapest 2016-2", CCLocation.BUDAPEST);
         Address address = new Address("Hungary", "1234", "Budapest", "Macskakő út 5.");
-        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address);
+        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, phoneNumber1, address);
         classBp2.addStudent(student);
 
         EntityTransaction transaction = em.getTransaction();
@@ -37,12 +43,13 @@ public class JPAExample {
         System.out.println("Ödön saved.");
 
         Address address2 = new Address("Hungary", "6789", "Budapest", "Harap u. 3.");
-        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address);
+        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, phoneNumber2, address2);
         classBp2.addStudent(student2);
 
         transaction.begin();
         em.persist(student2);
         em.persist(address2);
+        em.persist(classBp2);
         transaction.commit();
         System.out.println("Aladár saved.");
     }
